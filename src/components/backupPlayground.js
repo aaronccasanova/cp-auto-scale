@@ -37,12 +37,21 @@ const DynamicContainer = styled.div`
   border: 2px solid darkblue;
   /* ------------------------------------- */
   background: lightsteelblue;
-  width: 700px;
-  height: 758px;
+  width: 500px;
+  height: 500px;
+  /* height: 150vh; */
 
   transform: var(--scale);
   transform-origin: 0% 0%;
   /* transform: scale(0.888); */
+
+  div {
+    /* ---------For Editing Layout---------- */
+    border: 2px solid red;
+    width: 80vw;
+    /* ------------------------------------- */
+    font-size: 40px;
+  }
 `;
 
 const calculateScale = (childValue, parentValue) => {
@@ -56,6 +65,8 @@ class PlaygroundContainer extends Component {
   };
 
   componentDidMount() {
+    console.log(ReactDOM.findDOMNode(this.refs.main).parentNode);
+    console.log(ReactDOM.findDOMNode(this.refs.main).childNodes);
     const dynamicWidth = ReactDOM.findDOMNode(this.refs.dynamic).clientWidth;
     const dynamicHeight = ReactDOM.findDOMNode(this.refs.dynamic).clientHeight;
     const fixedWidth = ReactDOM.findDOMNode(this.refs.fixed).clientWidth;
@@ -84,9 +95,13 @@ class PlaygroundContainer extends Component {
   render() {
     console.log('state', this.state.scale);
     return (
-      <Wrapper>
+      <Wrapper ref="main">
         <FixedContainer ref="fixed">
-          <DynamicContainer scale={this.state.scale} ref="dynamic" />
+          <DynamicContainer scale={this.state.scale} ref="dynamic">
+            <div>
+              <div>hello</div>
+            </div>
+          </DynamicContainer>
         </FixedContainer>
       </Wrapper>
     );
