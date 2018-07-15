@@ -5,16 +5,16 @@ import styled from 'styled-components';
 
 import CPAutoScale from './components/CPAutoScale';
 
-const FixedContainer = styled.div`
+const ParentContainter = styled.div`
   /* ---------For Editing Layout---------- */
   border: 2px solid blue;
   /* ------------------------------------- */
   margin: 0 auto;
-  width: 400px;
+  width: 33%;
   height: 400px;
 `;
 
-const DynamicContainer = styled.div`
+const ChildContainer = styled.div`
   /* ---------For Editing Layout---------- */
   border: 2px solid red;
   /* ------------------------------------- */
@@ -31,15 +31,15 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        <FixedContainer>
-          <CPAutoScale refId="hello">
-            <DynamicContainer>
+        <ParentContainter>
+          <CPAutoScale refId="TestRef">
+            <ChildContainer>
               <div>
                 <h2>hello</h2>
               </div>
-            </DynamicContainer>
+            </ChildContainer>
           </CPAutoScale>
-        </FixedContainer>
+        </ParentContainter>
       </div>
     );
   }

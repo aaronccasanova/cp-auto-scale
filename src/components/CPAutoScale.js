@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import ReactDOM from 'react-dom';
 
+import ResizeObserver from 'react-resize-observer';
+
 const AutoScale = styled.div`
   --scale: ${props =>
     props.scale
@@ -33,23 +35,12 @@ class CPAutoScale extends Component {
   };
 
   componentDidMount() {
-    const parentRef = ReactDOM.findDOMNode(this.refs[this.props.refId])
-      .parentNode;
-    const childRef = ReactDOM.findDOMNode(this.refs[this.props.refId])
-      .childNodes[0];
-
-    parentRef.addEventListener('resize', this.autoScale);
-
-    childRef.addEventListener('resize', this.autoScale);
-
-    this.autoScale();
+    this.autoScale(this.props.refId);
   }
 
-  autoScale = () => {
-    const parentRef = ReactDOM.findDOMNode(this.refs[this.props.refId])
-      .parentNode;
-    const childRef = ReactDOM.findDOMNode(this.refs[this.props.refId])
-      .childNodes[0];
+  autoScale = refId => {
+    const parentRef = ReactDOM.findDOMNode(this.refs[refId]).parentNode;
+    const childRef = ReactDOM.findDOMNode(this.refs[refId]).childNodes[0];
 
     const childWidth = childRef.clientWidth;
     const childHeight = childRef.clientHeight;
@@ -75,11 +66,14 @@ class CPAutoScale extends Component {
   };
 
   render() {
-    console.log('stateScale', this.state.scale);
-    console.log(this.props.refId);
     return (
       <AutoScale ref={this.props.refId} scale={this.state.scale}>
         {this.props.children}
+        <ResizeObserver
+          onResize={rect => {
+            console.log('Resized. New bounds:', rect.width, 'x', rect.height);
+          }}
+        />
       </AutoScale>
     );
   }
