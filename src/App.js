@@ -10,6 +10,7 @@ const ParentContainter = styled.div`
   border: 2px solid blue;
   /* ------------------------------------- */
   margin: 0 auto;
+
   width: 33%;
   height: 400px;
 `;
@@ -19,7 +20,7 @@ const ChildContainer = styled.div`
   border: 2px solid red;
   /* ------------------------------------- */
   background: lightsteelblue;
-  width: 600px;
+  width: 400px;
   height: 400px;
 `;
 

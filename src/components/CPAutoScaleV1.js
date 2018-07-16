@@ -24,25 +24,18 @@ const AutoScale = styled.div`
   }
 `;
 
+const calculateScale = (childValue, parentValue) => {
+  // toFixed sets result to 3 decimal places (max amount for transform scale)
+  return (parentValue / childValue).toFixed(3);
+};
+
 class CPAutoScale extends Component {
   state = {
-    childWidth: null,
-    childHeight: null,
-    parentWidth: null,
-    parentHeight: null
+    scale: null
   };
 
   componentDidMount() {
     this.autoScale(this.props.refId);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.parentWidth !== this.state.parentWidth ||
-      prevState.parentHeight !== this.state.parentHeight
-    ) {
-      this.autoScale(this.props.refId);
-    }
   }
 
   autoScale = refId => {
@@ -54,44 +47,31 @@ class CPAutoScale extends Component {
     const parentWidth = parentRef.clientWidth;
     const parentHeight = parentRef.clientHeight;
 
-    this.setState({
-      childWidth,
-      childHeight,
-      parentWidth,
-      parentHeight
-    });
-  };
+    // if child container is bigger than parent container scale down
+    if (childWidth > parentWidth || childHeight > parentHeight) {
+      let widthScale;
+      let heightScale;
 
-  static calculateScale = (childValue, parentValue) => {
-    // toFixed sets result to 3 decimal places (max amount for transform scale)
-    return (parentValue / childValue).toFixed(3);
+      // calculate the scale based on whatever child container is the largest
+      if (childWidth > childHeight) {
+        widthScale = calculateScale(childWidth, parentWidth);
+      } else {
+        heightScale = calculateScale(childHeight, parentHeight);
+      }
+
+      this.setState({
+        scale: widthScale ? widthScale : heightScale
+      });
+    }
   };
 
   render() {
-    const { childWidth, childHeight, parentWidth, parentHeight } = this.state;
-
-    let cpScale;
-    // if child container is bigger than parent container scale down
-    if (childWidth > parentWidth || childHeight > parentHeight) {
-      let widthScale = CPAutoScale.calculateScale(childWidth, parentWidth);
-      let heightScale = CPAutoScale.calculateScale(childHeight, parentHeight);
-
-      // set cpScale to the lowest scale value
-      widthScale < heightScale
-        ? (cpScale = widthScale)
-        : (cpScale = heightScale);
-    }
-
     return (
-      <AutoScale ref={this.props.refId} scale={cpScale}>
+      <AutoScale ref={this.props.refId} scale={this.state.scale}>
         {this.props.children}
-        {/* this.props.children has to come before ResizeObserver */}
         <ResizeObserver
           onResize={rect => {
-            this.setState({
-              parentWidth: Math.floor(rect.width),
-              parentHeight: Math.floor(rect.height)
-            });
+            console.log('Resized. New bounds:', rect.width, 'x', rect.height);
           }}
         />
       </AutoScale>
