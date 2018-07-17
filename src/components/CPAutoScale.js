@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import ReactDOM from 'react-dom';
 
-import ResizeObserver from 'react-resize-observer';
-
 const AutoScale = styled.div`
   --scale: ${props =>
     props.scale
@@ -38,8 +36,8 @@ class CPAutoScale extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (
-      prevState.parentWidth !== this.state.parentWidth ||
-      prevState.parentHeight !== this.state.parentHeight
+      // refId has dynamic suffix logic in parent to trigger autoScale when child dims change
+      prevProps.refId !== this.props.refId
     ) {
       this.autoScale(this.props.refId);
     }
@@ -85,15 +83,6 @@ class CPAutoScale extends Component {
     return (
       <AutoScale ref={this.props.refId} scale={cpScale}>
         {this.props.children}
-        {/* this.props.children has to come before ResizeObserver */}
-        <ResizeObserver
-          onResize={rect => {
-            this.setState({
-              parentWidth: Math.floor(rect.width),
-              parentHeight: Math.floor(rect.height)
-            });
-          }}
-        />
       </AutoScale>
     );
   }
