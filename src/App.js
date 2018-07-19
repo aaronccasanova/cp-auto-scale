@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import styled from 'styled-components';
 
-import CPAutoScale from './components/CPAutoScale';
+import CPAutoScale from './components/AutoScale/CPAutoScale';
 
 const ParentContainter = styled.div`
   /* ---------For Editing Layout---------- */
