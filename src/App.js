@@ -11,7 +11,8 @@ const ParentContainter = styled.div`
   /* ------------------------------------- */
   margin: 0 auto;
 
-  width: 33%;
+  width: 55%;
+  /* width: 33%; */
   height: 400px;
 `;
 
